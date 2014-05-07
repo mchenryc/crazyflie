@@ -1,0 +1,17 @@
+<launch>
+  <node name="cflie_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="camera_name" value="cflie_cam" />
+    <param name="video_device" value="/dev/video0" />
+    <param name="io_method" value="mmap"/> <!-- mmap -->
+    <param name="image_width" value="640" /> <!-- 640 -->
+    <param name="image_height" value="480" /> <!-- 480 -->
+    <param name="pixel_format" value="yuyv" /> <!-- mjpeg -->
+    <param name="framerate" value="25" /> <!-- 30 -->
+    <param name="autofocus" value="0" /> <!-- 0 -->
+    <!--param name="camera_frame_id" value="cflie_fpv" /-->
+  </node>
+  <node name="cflie_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+    <remap from="image" to="/cflie_cam/image_raw"/>
+    <param name="autosize" value="true" />
+  </node>
+</launch>

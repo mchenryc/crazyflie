@@ -64,8 +64,6 @@ class Node():
                              rw_cache=sys.path[1]+"/cache")
 
         self._cf.connection_failed.add_callback(self._connection_failed)
-        self._cf.param.add_update_callback("imu_sensors", "HMC5883L",
-                                           self._althold_detection)
 
         self._althold_pub = rospy.Publisher('althold', CFAltHoldMsg)
         rospy.Subscriber("cfjoy", CFJoyMsg, self._receive_cmd)
@@ -78,6 +76,9 @@ class Node():
 
         self._cf.open_link(link_uri)
         rospy.loginfo("Connected to Crazyflie: %s", link_uri)
+
+        self._cf.param.add_update_callback("imu_sensors", "HMC5883L",
+                                           self._althold_detection)
 
     def disconnect(self):
         self._cf.close_link()
@@ -93,6 +94,7 @@ class Node():
         self._cf.commander.send_setpoint(joy.roll, joy.pitch, joy.yaw, joy.thrust)
 
     def _althold_detection(self, available):
+        rospy.loginfo("Altitude hold detection: %i", available)
         msg = self._create_althold_msg(available)
         self._althold_pub.publish(msg)
         # cb=(lambda name, found:

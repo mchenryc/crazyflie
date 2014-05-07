@@ -1,0 +1,4 @@
+<launch>
+  <node name="crazyflie" pkg="crazyflie" type="cf_node" />
+  <node name="controller" pkg="crazyflie" type="cf_teleop" />
+</launch>
